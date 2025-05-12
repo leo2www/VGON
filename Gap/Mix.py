@@ -33,8 +33,6 @@ def __initialize_SU9Basis__():
 
 
 Ns = None  # [xyab, N_xyab.reshape(-1)]
-
-
 def __initialize_Ns__():
     global Ns
     if Ns is None:
@@ -244,7 +242,7 @@ class Model(nn.Module):
         # get_mean
         mean = self.e2(h)
         # get_variance
-        log_var = self.e3(h)    # log of variance, easy for computing'result/model/vae_' + str(nq) + '_' + str(nlayer) + '.pth'
+        log_var = self.e3(h)  
         return mean, log_var
 
     def reparameterize(self, mean, log_var):

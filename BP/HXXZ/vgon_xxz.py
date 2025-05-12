@@ -20,21 +20,21 @@ def apply_1q_gate(params, wire):
 
 def apply_2q_gate(params, wires):
     # params of shape (5, 3)
-    apply_1q_gate(params[0, :], wires[0])
-    apply_1q_gate(params[1, :], wires[1])
+    apply_1q_gate(params[0], wires[0])
+    apply_1q_gate(params[1], wires[1])
     qml.CNOT(wires=[wires[1], wires [0]])
     qml.RZ(params[2, 0], wires=wires [0])
     qml.RY(params[2, 1],wires=wires[1])
     qml.CNOT(wires=[wires[0], wires[1]])
     qml.RY(params[2, 2], wires=wires[1])
     qml.CNOT(wires=[wires[1], wires[0]])
-    apply_1q_gate(params[3, :], wires [0])
-    apply_1q_gate(params[4, :], wires [1])
+    apply_1q_gate(params[3], wires [0])
+    apply_1q_gate(params[4], wires [1])
 
 def layer_2U(input):
     idx_gate = 0
     for i in np.arange(0, nq-1):
-        apply_2q_gate(input[idx_gate:idx_gate+5,:],wires=[i, (i+1)])
+        apply_2q_gate(input[idx_gate:idx_gate+5,:], wires=[i, (i+1)])
         idx_gate += 5
 
 # Hamiltonian
@@ -58,7 +58,6 @@ dev = qml.device("lightning.gpu", wires=nq, batch_obs=True)
 
 @qml.qnode(dev, interface='torch', diff_method='adjoint')
 def circuit(inputs): # return energiy
-    inputs = torch.reshape(inputs, shapes[0])
     qml.layer(layer_2U, nlayer, inputs)
     return qml.expval(H_XXZ(nq, False))  # False → PBC, True → OBC
 
@@ -107,12 +106,7 @@ class Model(nn.Module):
         for i in range(1, len(self.d4)):
             out = F.relu(self.d4[i](out))
         out = self.d5(out)
-
-        _out = []
-        for i in range(out.shape[0]):
-            _out.append(circuit(out[i]))
-        out = torch.vstack(_out)
-        return out
+        return circuit(out.transpose(0, 1).reshape(tuple(np.append(shapes, z.shape[0]))))
     
     # used to calculate fidelity
     def decoder_vec(self, z):
