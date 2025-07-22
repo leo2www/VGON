@@ -126,7 +126,6 @@ venv.bak/
 
 # uv
 .uv_cache/
-uv.lock
 
 # Spyder project settings
 .spyderproject
