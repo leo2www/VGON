@@ -7,24 +7,35 @@ requires-python = ">=3.10"
 
 dependencies = [
     "torch",
-    "pennylane",
+    "toqito>=1.1.2",
+]
+
+[dependency-groups]
+optimization = [
+    "cvxpy>=1.7.2",
+    "cvxpylayers>=0.1.9",
+]
+quantumsim = [
+    "pennylane>=0.42.3",
 ]
 
 [project.optional-dependencies]
 # 可以保留 plot 组用于明确安装
 # uv sync -U --extra plot
-# you could cancle 'plot' block to use NumPy2.x.y
+# you could cancle 'plot' block to use basic feature.
 plot = [
-    "numpy<2",  # for ptiprince requirements only
-    "pandas<2", # for ptiprince requirements only
+    "pandas", 
     "seaborn",
-    "matplotlib<3.9", # for ptiprince requirements only
     "ptitprince",
     "scipy",
+]
+notebook = [
+    "ipykernel>=6.30.1",
 ]
 
 [tool.uv.sources]
 torch = { index = "pytorch" }
+ptiprince = {git = "https://github.com/leo2www/PtitPrince.git"}
 # pennylane = { git = "https://github.com/PennyLaneAI/pennylane.git" }
 # seaborn = {git = "https://github.com/mwaskom/seaborn.git"}
 
