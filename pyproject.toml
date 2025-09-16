@@ -3,31 +3,25 @@ name = "vgon"
 version = "0.1.0"
 description = "Variational Generative Optimization Network (VGON)."
 authors = []
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 
 dependencies = [
     "torch",
     "toqito>=1.1.2",
-]
-
-[dependency-groups]
-optimization = [
     "cvxpy>=1.7.2",
     "cvxpylayers>=0.1.9",
-]
-quantumsim = [
     "pennylane>=0.42.3",
 ]
 
 [project.optional-dependencies]
 # 可以保留 plot 组用于明确安装
-# uv sync -U --extra plot
+# uv sync --extra plot --extra notebook -U
 # you could cancle 'plot' block to use basic feature.
 plot = [
-    "pandas", 
-    "seaborn",
-    "ptitprince",
-    "scipy",
+    "pandas>=2.3.2",
+    "ptiprince>=0.2.7",
+    "scipy>=1.16.2",
+    "seaborn>=0.13.2",
 ]
 notebook = [
     "ipykernel>=6.30.1",
