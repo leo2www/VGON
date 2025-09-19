@@ -2,7 +2,10 @@
 name = "vgon"
 version = "0.1.0"
 description = "Variational Generative Optimization Network (VGON)."
-authors = []
+authors = [
+    {name = "Lingxia Zhang"},
+    {name = "Xiaodie Lin"}
+]
 requires-python = ">=3.11"
 
 dependencies = [
@@ -11,10 +14,10 @@ dependencies = [
     "cvxpy>=1.7.2",
     "cvxpylayers>=0.1.9",
     "pennylane>=0.42.3",
+    "pennylane-lightning>=0.42.0",
 ]
 
 [project.optional-dependencies]
-# 可以保留 plot 组用于明确安装
 # uv sync --extra plot --extra notebook -U
 # you could cancle 'plot' block to use basic feature.
 plot = [
@@ -27,13 +30,35 @@ notebook = [
     "ipykernel>=6.30.1",
 ]
 
+# All optional dependencies
+all = [
+    "vgon[plot,notebook]"
+]
+
+[project.urls]
+Homepage = "https://vgon.funqitang.cn"
+Repository = "https://github.com/zhangjianjianzz/VGON.git"
+Documentation = "https://vgon.funqitang.cn"
+
+
+
 [tool.uv.sources]
-torch = { index = "pytorch" }
+# "pytorch-cpu", "pytorch-cuda"
+# For users outside of CUDA eco, redirect torch.index to "pytorch-cpu"
+torch = { index = "pytorch-cuda" }
+# dependency-updated repo forked from [pog87/PtitPrince](https://github.com/pog87/PtitPrince.git) 
 ptiprince = {git = "https://github.com/leo2www/PtitPrince.git"}
 # pennylane = { git = "https://github.com/PennyLaneAI/pennylane.git" }
 # seaborn = {git = "https://github.com/mwaskom/seaborn.git"}
 
+
+
 [[tool.uv.index]]
-name = "pytorch"
+name = "pytorch-cpu"
 url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cuda"
+url = "https://download.pytorch.org/whl/cu129"
 explicit = true
