@@ -28,15 +28,7 @@ sphinx:
 # python:
 #    install:
 #    - requirements: docs/requirements.txt
-python:
-  install:
-    - method: pip
-      path: .
-      extra_requirements:
-        - docs
-    # Alternative method using uv (experimental)
-    # - method: pip
-    #   requirements: requirements-docs.txt
+
 
 # Optional: build additional formats
 formats:
