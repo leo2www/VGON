@@ -1,3 +1,3 @@
 # Summary
 
-* [Installation](README.md)
+* [Installation](EnvSetup.md)
