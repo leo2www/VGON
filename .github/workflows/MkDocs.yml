@@ -2,7 +2,7 @@ name: ci-MkDocs
 on:
   push:
     branches:
-      - doc-t
+      - main
 
 permissions:
   contents: write
