@@ -1,0 +1,60 @@
+site_name: VGON Docs
+site_url: https://vgon.funcqitang.cn/docs
+theme:
+  name: material
+  language: en
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil 
+    view: material/eye
+  features:
+    - content.action.view
+    - content.code.annotate
+    - content.code.copy
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.tabs
+    - navigation.path
+    - navigation.prune
+    - navigation.top
+
+markdown_extensions:
+  # 启用代码高亮
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  
+  # 支持更好的列表处理
+  - mdx_truly_sane_lists
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  
+  # 其他有用的扩展
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+
+plugins:
+  - search
+  - literate-nav:
+      nav_file: SUMMARY.md
+# Add a git repository link to source code 
+repo_url: https://github.com/zhangjianjianzz/VGON
+repo_name: zhangjianjianzz/VGON
+edit_uri: edit/doc-t/docs
+
+nav:
+  - Home: index.md
+  - Tutorial:
+      - Installation: Tutorial/Installation.md

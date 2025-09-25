@@ -215,8 +215,8 @@ def Loss_Gap(x_rec):
     state, e1 = X2Paras(x_rec)
     cplayer_locc = E2Locc()
     cplayer_lo = E2Lo()
-    e2_locc, _, _, _ = cplayer_locc(state, e1, solver_args={"eps": 1e-8})
-    e2_lo, _, _, _ = cplayer_lo(state, e1, solver_args={"eps": 1e-8})
+    e2_locc, _, _, _ = cplayer_locc(state, e1)
+    e2_lo, _, _, _ = cplayer_lo(state, e1)
     gap = (e2_lo - e2_locc).type(torch.float32)
     return gap.sum()
 
@@ -297,5 +297,5 @@ if __name__ == '__main__':
 
     # Sample and save generated data
     z_samples = MultivariateNormal(torch.zeros(z_dim), torch.eye(z_dim)).sample([1000])
-    generated_data = model.decode(z_samples).detach().numpy()
+    generated_data = model.decoder(z_samples).detach().numpy()
     np.savetxt(os.path.join('results', 'generated_data.csv'), generated_data, delimiter=',')

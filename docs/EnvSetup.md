@@ -27,6 +27,7 @@ This guide provides instructions for setting up the VGON (Variational Generative
     ```bash
     source .venv/bin/activate
     ```
+
 3. Install dependecies in `.venv` for VGON scripts 
     ```bash
     uv sync --extra all
