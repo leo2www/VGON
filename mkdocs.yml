@@ -14,9 +14,13 @@ theme:
     - navigation.instant
     - navigation.instant.prefetch
     - navigation.tabs
+    - navigation.sections
+    - navigation.expand
     - navigation.path
     - navigation.prune
     - navigation.top
+    - toc.follow
+    - toc.integrate
 
 markdown_extensions:
   # 启用代码高亮
@@ -44,17 +48,19 @@ markdown_extensions:
       alternate_style: true
   - attr_list
   - md_in_html
+  # Table of contents配置
+  - toc:
+      permalink: true
+      toc_depth: 3
 
 plugins:
   - search
   - literate-nav:
       nav_file: SUMMARY.md
+
 # Add a git repository link to source code 
 repo_url: https://github.com/zhangjianjianzz/VGON
 repo_name: zhangjianjianzz/VGON
 edit_uri: edit/doc-t/docs
 
-nav:
-  - Home: index.md
-  - Tutorial:
-      - Installation: Tutorial/Installation.md
+
