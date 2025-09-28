@@ -53,8 +53,3 @@ plugins:
 repo_url: https://github.com/zhangjianjianzz/VGON
 repo_name: zhangjianjianzz/VGON
 edit_uri: edit/doc-t/docs
-
-nav:
-  - Home: index.md
-  - Tutorial:
-      - Installation: Tutorial/Installation.md
