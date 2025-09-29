@@ -1,5 +1,5 @@
 site_name: VGON Docs
-site_url: https://vgon.funcqitang.cn/docs
+site_url: https://vgon.funcqitang.cn/
 theme:
   name: material
   language: en
@@ -54,7 +54,3 @@ repo_url: https://github.com/zhangjianjianzz/VGON
 repo_name: zhangjianjianzz/VGON
 edit_uri: edit/doc-t/docs
 
-nav:
-  - Home: index.md
-  - Tutorial:
-      - Installation: Tutorial/Installation.md

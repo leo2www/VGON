@@ -1,3 +1,5 @@
 # Summary
 
-* [Installation](EnvSetup.md)
+* [Home](index.md)
+* Setup environments
+    * [Configuration](EnvSetup.md)
