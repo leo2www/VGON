@@ -1,27 +1,30 @@
-# VGON Documentation
+# VGON
 
-Welcome to the VGON (Variational Generative Optimization Network) documentation.
 
-## About VGON
+VGON, short for “Variational Generative Optimization Network”, refers to a class of generative models intended to discover optimal solutions for quantum problems within the general framework of variational optimization.
 
-VGON is a variational generative optimization network for quantum state preparation and optimization problems.
+# Project
 
-## Contents
+Here we provide three numerical experiments corresponding to the quantum task discussed [in our paper](https://doi.org/10.1038/s42005-025-02261-4), as well as a unified Python environment configuration defined in  `pyproject.toml`.
 
-- [Installation](EnvSetup.md) - Setup instructions and environment configuration
+For more configuration details, please  check the [setup documentation here](https://vgon.funqitang.cn/EnvSetup/) 
 
-## Repository Structure
+## Project Structure
 
-This repository contains implementations and experiments for:
+The repository is organized as follows:
 
-- **BP/**: Barren plateau studies
-  - `HXXZ/`: Heisenberg XXZ model experiments
-  - `Z1Z2/`: Z1Z2 model experiments
-- **Degeneracy/**: Degeneracy analysis
-  - `H232/`: H232 model experiments
-  - `MG/`: MG model experiments  
-- **Gap/**: Gap analysis experiments
+```
+VGON/
+├── BP/ # Barren Plateau experiments
+│ ├── HXXZ/ # Heisenberg XXZ model
+│ └── Z1Z2/ # Z1Z2 model
+├── Degeneracy/ # Degeneracy detection experiments
+│ ├── H232/ # H232 Hamiltonian
+│ └── MG/ # Graph states
+└── Gap/ # Nonlocality gap experiments
+```
 
-## Getting Started
+---
 
-To get started with VGON, please refer to the [Installation Guide](EnvSetup.md).
+# Citing
+If you are inspired by VGON for academic work, we encourage you to [cite our papers](https://doi.org/10.1038/s42005-025-02261-4). If you use VGON in industry, we'd love to hear from you over email.
