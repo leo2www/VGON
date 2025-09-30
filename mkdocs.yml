@@ -9,24 +9,38 @@ theme:
     view: material/eye
   features:
     - content.action.view
+    # 代码标签（code annotations）
     - content.code.annotate
     - content.code.copy
+    - content.tooltips  # 启用工具提示
+    - content.code.folding  # 启用代码折叠
+
+    - content.tabs.link
+    - content.tabs.sticky
+    - navigation.top # 返回顶部按钮
+    - navigation.tracking  # 跟踪当前页面
     - navigation.instant
     - navigation.instant.prefetch
-    - navigation.tabs
-    - navigation.sections
-    - navigation.expand
+    - navigation.tabs # 启用标签导航
+    - navigation.expand   # 默认展开导航栏
+    - navigation.sections # 启用章节导航
     - navigation.path
     - navigation.prune
     - navigation.top
     - toc.follow
     - toc.integrate
+
 markdown_extensions:
+  # 启用表情符号支持
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   # 启用代码高亮
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
+      # linenums: true # 显示行号
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences:
@@ -35,14 +49,14 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
   
-  # 支持更好的列表处理
-  - mdx_truly_sane_lists
+
   - pymdownx.tasklist:
       custom_checkbox: true
   
   # 其他有用的扩展
   - admonition
   - pymdownx.details
+    # 在网页上显示“Windows”和“Linux”两个标签
   - pymdownx.tabbed:
       alternate_style: true
   - attr_list

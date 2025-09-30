@@ -16,17 +16,24 @@ This guide provides instructions for setting up the VGON (Variational Generative
 
 ### Setup with uv
 1. Clone the repository to local disk.
-    ```bash
-    git clone https://github.com/zhangjianjianzz/VGON.git && cd VGON
-    ```
-2. Create virtual environment if it wasn't contained
-    ```bash
+        ```
+        git clone https://github.com/zhangjianjianzz/VGON.git && cd VGON
+        ```
+
+1. Create virtual environment if it wasn't contained
+    ``` 
     uv venv .venv
     ```
     The python virtual environment will be located at `.venv` fold under root path in default. Linux/macOS users could activate it in shell by typing
-    ```bash
-    source .venv/bin/activate
-    ```
+
+    === ":material-linux: Linux"
+        ```bash
+        source .venv/bin/activate
+        ```
+    === ":material-microsoft-windows: Windows"
+        ```powershell
+        .venv/Scripts/activate
+        ```
 
 3. Install dependecies in `.venv` for VGON scripts 
     ```bash
