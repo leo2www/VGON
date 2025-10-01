@@ -12,7 +12,7 @@ dependencies = []
 
 [project.optional-dependencies]
 core = [
-        "torch",
+        "torch[opt-einsum]",
     "toqito>=1.1.2",
     "cvxpy>=1.7.2",
     "cvxpylayers>=0.1.9",

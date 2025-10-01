@@ -73,50 +73,35 @@ def __initialize_Ns__():
 
 
 def X2Paras(x_rec):
-    # construct sigma
+    device = x_rec.device
+    dtypeC = torch.complex128   # complex dtype for quantum, complex128 for better precision
 
+    # construct sigma σ
     theta = x_rec[:, 1:10]
-    theta_norm = normalize(theta, p=2.0, dim=1)
+    theta_norm = normalize(theta, p=2.0, dim=1)     # shape (B,9)
+    # construct Sigma Σ
+    Sigma = torch.diag_embed( theta_norm**2).type(dtypeC)   # shape (B,9,9)
 
-    coeffs1 = [torch.pow(theta_norm[:,0],2).unsqueeze(-1).unsqueeze(-1),
-               torch.pow(theta_norm[:,1],2).unsqueeze(-1).unsqueeze(-1),
-               torch.pow(theta_norm[:,2],2).unsqueeze(-1).unsqueeze(-1),
-               torch.pow(theta_norm[:,3],2).unsqueeze(-1).unsqueeze(-1),
-               torch.pow(theta_norm[:,4],2).unsqueeze(-1).unsqueeze(-1),
-               torch.pow(theta_norm[:,5],2).unsqueeze(-1).unsqueeze(-1),
-               torch.pow(theta_norm[:,6],2).unsqueeze(-1).unsqueeze(-1),
-               torch.pow(theta_norm[:,7],2).unsqueeze(-1).unsqueeze(-1),
-               torch.pow(theta_norm[:,8],2).unsqueeze(-1).unsqueeze(-1)]
+    # construct U with dtypeC for better precision
+    global SU9Basis     # tips: avoid UnboundLocalError for referenced before assignment
+    SU9Basis = torch.from_numpy(__initialize_SU9Basis__()).to(device)   #reset SU9Basisi and convert to torch.Tensor on the same device as x_rec
+    lambdas = x_rec[:, 10:].to(device=device, dtype=dtypeC)   # shape (Batch,80)
+    # einsum: sum_I λ_I * SU9Basis[I+1] for each batch 'b'
+    # -> λ (b,I)=(B,80) × SU9Basis(I,i,j)=(80,9,9) → (B,9,9)
+    # torch[opt-einsum] for speedup if installed (our pyproject.toml includes it)
+    L1 = torch.einsum("bI,Iij->bij", lambdas.to(device=device, dtype=dtypeC), SU9Basis[1:81].to(device=device, dtype=dtypeC))
 
-    sigma = None
-    Sigma = 0
-    for i in range(9):
-        blank = torch.zeros((9,9),dtype=torch.complex64)
-        blank[i,i] = 1
-        if sigma is None:
-            sigma = blank * coeffs1[i]
-        else:
-            sigma += blank * coeffs1[i]
-        Sigma += coeffs1[i]
-
-    # construct U
-    __initialize_SU9Basis__()
-    global SU9Basis
-    L1 = torch.reshape(SU9Basis[1, :, :] * x_rec[:,10].unsqueeze(-1).unsqueeze(-1), (-1, 9, 9))
-
-    for i in range(1, 80):
-        L1 += torch.reshape(SU9Basis[i+1, :, :] * x_rec[:,10+i].unsqueeze(-1).unsqueeze(-1), (-1, 9, 9))
-
+    # compute U = exp(-i L1)
     U = torch.linalg.matrix_exp(-1j * L1)
 
     # construct state
-    state = torch.bmm(U, sigma)
+    state = torch.bmm(U, Sigma)   # # batch Matrix Multiplication
     state = torch.bmm(state, torch.conj(torch.transpose(U, 1, 2)))
     # print(state)
 
-    # construct e1
-    e1 = (torch.tanh(x_rec[:,0])+1) / 2
-    return state, e1.type_as(state).unsqueeze(-1)
+    # construct p1 with e1
+    p_1 = (torch.tanh(x_rec[:,0])+1) / 2
+    return state, p_1
 
 
 def E2Locc():
