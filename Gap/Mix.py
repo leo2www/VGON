@@ -29,8 +29,8 @@ def __initialize_SU9Basis__():
             for j in range(n):
                 SU9Basis[k, :, :] = gen_gell_mann(i, j, n)
                 k = k + 1
-        SU9Basis = torch.reshape(torch.from_numpy(SU9Basis).type(torch.complex64), (n**2, n**2, 1)).to(device)
-
+        SU9Basis = torch.from_numpy(SU9Basis).type(torch.complex64).to(device)
+    return SU9Basis
 
 Ns = None  # [xyab, N_xyab.reshape(-1)]
 def __initialize_Ns__():
@@ -80,16 +80,17 @@ def X2Paras(x_rec):
     theta = x_rec[:, 1:10]
     theta_norm = normalize(theta, p=2.0, dim=1)     # shape (B,9)
     # construct Sigma Σ
-    Sigma = torch.diag_embed( theta_norm**2).type(dtypeC)   # shape (B,9,9)
+    Sigma = torch.diag_embed( theta_norm**2).type(dtypeC).to(device)   # shape (B,9,9)
 
     # construct U with dtypeC for better precision
     global SU9Basis     # tips: avoid UnboundLocalError for referenced before assignment
-    SU9Basis = torch.from_numpy(__initialize_SU9Basis__()).to(device)   #reset SU9Basisi and convert to torch.Tensor on the same device as x_rec
+    SU9Basis = __initialize_SU9Basis__().to(device)   #reset SU9Basisi and convert to torch.Tensor on the same device as x_rec
     lambdas = x_rec[:, 10:].to(device=device, dtype=dtypeC)   # shape (Batch,80)
+    SU9Basis_c128 = SU9Basis.to(dtype=dtypeC)
     # einsum: sum_I λ_I * SU9Basis[I+1] for each batch 'b'
     # -> λ (b,I)=(B,80) × SU9Basis(I,i,j)=(80,9,9) → (B,9,9)
     # torch[opt-einsum] for speedup if installed (our pyproject.toml includes it)
-    L1 = torch.einsum("bI,Iij->bij", lambdas.to(device=device, dtype=dtypeC), SU9Basis[1:81].to(device=device, dtype=dtypeC))
+    L1 = torch.einsum("bI,Iij->bij", lambdas.to(device=device, dtype=dtypeC), SU9Basis_c128[1:81].to(device=device, dtype=dtypeC))
 
     # compute U = exp(-i L1)
     U = torch.linalg.matrix_exp(-1j * L1)
@@ -101,7 +102,7 @@ def X2Paras(x_rec):
 
     # construct p1 with e1
     p_1 = (torch.tanh(x_rec[:,0])+1) / 2
-    return state, p_1
+    return state, p_1.to(device=device, dtype=dtypeC).unsqueeze(-1) 
 
 
 def E2Locc():

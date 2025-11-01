@@ -12,7 +12,7 @@ dependencies = []
 
 [project.optional-dependencies]
 core = [
-        "torch[opt-einsum]",
+    "torch[opt-einsum]",
     "toqito>=1.1.2",
     "cvxpy>=1.7.2",
     "cvxpylayers>=0.1.9",
@@ -57,7 +57,7 @@ Documentation = "https://vgon.funqitang.cn"
 [tool.uv.sources]
 # "pytorch-cpu", "pytorch-cuda"
 # For users outside of CUDA eco, redirect torch.index to "pytorch-cpu"
-torch = { index = "pytorch-cuda" }
+torch = { index = "pytorch-cpu" }
 # dependency-updated repo forked from [pog87/PtitPrince](https://github.com/pog87/PtitPrince.git) 
 ptiprince = {git = "https://github.com/leo2www/PtitPrince.git"}
 mkdocs-material = { git = "https://github.com/squidfunk/mkdocs-material.git" }

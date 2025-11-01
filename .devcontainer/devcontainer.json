@@ -1,6 +1,6 @@
 {
   "image": "mcr.microsoft.com/devcontainers/python:3.12",
-  "remoteUser": "vscode",
+  "remoteUser": "codespace",
   "features": {
     "ghcr.io/devcontainers-extra/features/devcontainers-cli:1": {},
     "ghcr.io/devcontainers-extra/features/uv:1": {}
@@ -13,5 +13,5 @@
       ]
     }
   },
-  "postCreateCommand": "pip install -r requirements.txt || true"
+  "postCreateCommand": "uv sync --extra full || true"
 }
