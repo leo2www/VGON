@@ -1,13 +1,17 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12-alpine",
+  "remoteUser": "vscode",
   "features": {
-    "ghcr.io/va-h/devcontainers-features/uv:1": {}
+    "ghcr.io/devcontainers-extra/features/devcontainers-cli:1": {},
+    "ghcr.io/devcontainers-extra/features/uv:1": {}
   },
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-python.python"
+        "ms-python.python",
+        "ms-toolsai.jupyter"
       ]
     }
-  }
+  },
+  "postCreateCommand": "pip install -r requirements.txt || true"
 }
