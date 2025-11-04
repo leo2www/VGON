@@ -4,45 +4,16 @@ version = "0.1.0"
 description = "Variational Generative Optimization Network (VGON)."
 authors = [
     {name = "Lingxia Zhang"},
-    {name = "Xiaodie Lin"}
 ]
+
 requires-python = ">=3.11"
 
-dependencies = []
-
-[project.optional-dependencies]
-core = [
-    "torch[opt-einsum]",
-    "toqito>=1.1.2",
-    "cvxpy>=1.7.2",
+dependencies = [
+    "cvxpy>=1.7.1",
     "cvxpylayers>=0.1.9",
-    "pennylane>=0.42.3",
-    "pennylane-lightning>=0.42.0",
 ]
 
-# uv sync --extra plot --extra notebook -U
-# you could cancle 'plot' block to use basic feature.
-plot = [
-    "pandas>=2.3.2",
-    "ptiprince>=0.2.7",
-    "scipy>=1.16.2",
-    "seaborn>=0.13.2",
-]
-notebook = [
-    "ipykernel>=6.30.1",
-]
-doc = [
-    "mkdocs-material",
-    "mkdocs-literate-nav>=0.6.2",
-    "mdx-truly-sane-lists>=1.3",
-]
 
-# All optional dependencies
-full = [
-    "vgon[core,plot,notebook,doc]"
-]
-
-# do NOT pack anything.
 [tool.setuptools]
 packages = []
 py-modules = []
@@ -52,19 +23,61 @@ Homepage = "https://vgon.funqitang.cn"
 Repository = "https://github.com/zhangjianjianzz/VGON.git"
 Documentation = "https://vgon.funqitang.cn"
 
+[project.optional-dependencies]
+cuda = [
+    "torch[opt-einsum]>=2.9.0",
+]
+cpu = [
+    "torch[opt-einsum]",
+    "typing-extensions>=4.15.0",
+]
+doc = [
+    "mdx-truly-sane-lists>=1.3",
+    "mkdocs-literate-nav>=0.6.2",
+    "mkdocs-material>=9.6.23",
+]
+notebook = [
+    "ipykernel>=7.1.0",
+]
+plot = [
+    "pandas>=2.3.3",
+    "ptiprince",
+    "scipy>=1.15.3",
+    "seaborn>=0.13.2",
+]
+qsimu = [
+    "pennylane>=0.43.0",
+    "pennylane-lightning>=0.43.0",
+    "toqito>=1.1.2",
+]
+[dependency-groups]
+full= [
+    "vgon[doc,notebook,plot,qsimu]",
+]
 
+
+[tool.uv]
+conflicts = [
+    [
+        {extra = "cuda"},
+        {extra = "cpu"},
+    ],
+]
 
 [tool.uv.sources]
 # "pytorch-cpu", "pytorch-cuda"
 # For users outside of CUDA eco, redirect torch.index to "pytorch-cpu"
-torch = { index = "pytorch-cpu" }
-# dependency-updated repo forked from [pog87/PtitPrince](https://github.com/pog87/PtitPrince.git) 
-ptiprince = {git = "https://github.com/leo2www/PtitPrince.git"}
+torch = [
+    { index = "pytorch-cpu", extra = "cpu" },
+    { index = "pytorch-cuda", extra = "cuda" },
+]
 mkdocs-material = { git = "https://github.com/squidfunk/mkdocs-material.git" }
 
 # pennylane = { git = "https://github.com/PennyLaneAI/pennylane.git" }
 # seaborn = {git = "https://github.com/mwaskom/seaborn.git"}
-
+toqito = {git = "https://github.com/vprusso/toqito.git"}
+ptiprince = { git = "https://github.com/leo2www/PtitPrince.git" }
+vgon = { workspace = true }
 
 
 [[tool.uv.index]]
@@ -76,3 +89,7 @@ explicit = true
 name = "pytorch-cuda"
 url = "https://download.pytorch.org/whl/cu129"
 explicit = true
+
+
+
+

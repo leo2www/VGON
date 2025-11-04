@@ -16,9 +16,9 @@ This guide provides instructions for setting up the VGON (Variational Generative
 
 ### Setup with uv
 1. Clone the repository to local disk.
-        ```
-        git clone https://github.com/zhangjianjianzz/VGON.git && cd VGON
-        ```
+    ```bash
+    git clone https://github.com/zhangjianjianzz/VGON.git && cd VGON
+    ```
 
 1. Create virtual environment if it wasn't contained
     ``` 
@@ -37,7 +37,7 @@ This guide provides instructions for setting up the VGON (Variational Generative
 
 3. Install dependecies in `.venv` for VGON scripts 
     ```bash
-    uv sync --extra all
+    uv sync --extra cpu --group full
     ```
     `plot` and `notebook` groups are optional for VGON itself. 
 
@@ -92,6 +92,10 @@ pip install -e ".[all]"      # Install everything
 pip install git+https://github.com/pog87/PtitPrince.git
 ```
 
+### from uv to pip
+```bash
+( echo '--extra-index-url https://download.pytorch.org/whl/cpu' && uv export --no-dev --no-emit-package uv --no-hashes --group full --extra cpu ) > requirements.txt
+```
 ## Verify Installation
 
 Test your installation by running a simple example:
@@ -162,6 +166,9 @@ matlab -batch "run('Gap/plotGap.m')"  # Generate MATLAB plots
 ### Common Issues
 
 1. **CUDA not found**: If you have a GPU but CUDA is not detected, reinstall PyTorch with CUDA support
+    ```bash
+    uv sync -U --extra gpu --group full
+    ```
 2. **PennyLane device errors**: Ensure you have the correct PennyLane plugins installed
 3. **Memory issues**: Reduce batch sizes in the configuration files
 4. **Import errors**: Make sure all dependencies are installed correctly
