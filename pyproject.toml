@@ -14,9 +14,12 @@ dependencies = [
 ]
 
 
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [tool.setuptools]
-packages = []
-py-modules = []
+packages = ["vgon"]
 
 [project.urls]
 Homepage = "https://vgon.funqitang.cn"
@@ -52,6 +55,9 @@ qsimu = [
 ]
 [dependency-groups]
 full= [
+    "vgon[plot,qsimu]",
+]
+dev =[
     "vgon[doc,notebook,plot,qsimu]",
 ]
 
@@ -89,7 +95,3 @@ explicit = true
 name = "pytorch-cuda"
 url = "https://download.pytorch.org/whl/cu129"
 explicit = true
-
-
-
-

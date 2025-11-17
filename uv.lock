@@ -2905,8 +2905,11 @@ qsimu = [
 ]
 
 [package.dev-dependencies]
-full = [
+dev = [
     { name = "vgon", extra = ["doc", "notebook", "plot", "qsimu"] },
+]
+full = [
+    { name = "vgon", extra = ["plot", "qsimu"] },
 ]
 
 [package.metadata]
@@ -2931,7 +2934,8 @@ requires-dist = [
 provides-extras = ["cuda", "cpu", "doc", "notebook", "plot", "qsimu"]
 
 [package.metadata.requires-dev]
-full = [{ name = "vgon", extras = ["doc", "notebook", "plot", "qsimu"], virtual = "." }]
+dev = [{ name = "vgon", extras = ["doc", "notebook", "plot", "qsimu"], virtual = "." }]
+full = [{ name = "vgon", extras = ["plot", "qsimu"], virtual = "." }]
 
 [[package]]
 name = "watchdog"

@@ -1,0 +1,117 @@
+name: Build and Upload Wheels to GitHub Packages
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build wheels on ${{ matrix.os }} Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+    
+      - name: Install build tools
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install build tomli
+
+      # - name: Install runtime deps needed at build time
+      #   run: |
+      #     python -m pip install numpy scipy diffcp cvxpy
+
+      - name: Get version from pyproject.toml
+        id: get_version
+        run: |
+          VERSION=$(python - << 'PYCODE'
+          import pathlib
+          try:
+              import tomllib
+          except ModuleNotFoundError:
+              import tomli as tomllib
+
+          data = tomllib.loads(pathlib.Path('pyproject.toml').read_text('utf-8'))
+          print(data['project']['version'])
+          PYCODE
+          )
+          echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Get branch and short SHA
+        id: git_info
+        run: |
+          REF_NAME="${GITHUB_REF_NAME}"
+          SHORT_SHA="${GITHUB_SHA::5}"
+          echo "BRANCH=$REF_NAME" >> "$GITHUB_OUTPUT"
+          echo "SHORT_SHA=$SHORT_SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Bump version for non-master branches
+        if: github.ref != 'refs/heads/master'
+        run: |
+          BASE_VERSION="${{ steps.get_version.outputs.VERSION }}"
+          BRANCH="${{ steps.git_info.outputs.BRANCH }}"
+
+          # 根据分支名映射不同的 dev 序号（示例映射）
+          DEV_SUFFIX=0
+          if [ "$BRANCH" = "PEP8" ]; then
+            DEV_SUFFIX=8
+          elif [ "$BRANCH" = "dev" ]; then
+            DEV_SUFFIX=1
+          fi
+
+          NEW_VERSION="${BASE_VERSION}.dev${DEV_SUFFIX}"
+
+          echo "Using version: $NEW_VERSION"
+
+          NEW_VERSION="$NEW_VERSION" python - << 'PYCODE'
+          import pathlib
+          import re
+          import os
+
+          path = pathlib.Path("pyproject.toml")
+          data = path.read_text("utf-8")
+
+          new_version = os.environ["NEW_VERSION"]
+          pattern = r'(?m)^(version\s*=\s*")([^"]*)(")'
+          repl = r'\g<1>' + new_version + r'\g<3>'
+          new_data, n = re.subn(pattern, repl, data)
+          if n == 0:
+              raise SystemExit("No version= found to replace in pyproject.toml")
+          path.write_text(new_data, "utf-8")
+          PYCODE
+
+      - name: Build wheel
+        run: |
+          python -m build
+
+      - name: Upload wheel as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheel-${{ github.ref_name }}-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: dist/
+
+      - name: Upload wheel to cnb Packages
+        env:
+          TWINE_USERNAME: ${{ vars.CNB_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.CNB_TOKEN }}
+          TWINE_REPOSITORY_URL: ${{ vars.CNB_REPOSITORY_URL_AFTER }}
+        run: |
+          python -m pip install twine
+          python -m twine upload dist/* --verbose
