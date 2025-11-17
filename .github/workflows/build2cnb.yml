@@ -12,6 +12,7 @@ jobs:
   build:
     name: Build wheels on ${{ matrix.os }} Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
+    environment: CNB_TOKEN
     defaults:
       run:
         shell: bash
