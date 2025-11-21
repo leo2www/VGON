@@ -28,10 +28,12 @@ Documentation = "https://vgon.funqitang.cn"
 
 [project.optional-dependencies]
 cuda = [
-    "torch[opt-einsum]>=2.9.0",
+    "torch==2.9.1+cu130",
+    "opt-einsum==3.4.0",
 ]
 cpu = [
-    "torch[opt-einsum]",
+    "torch==2.9.1",
+    "opt-einsum==3.4.0",
     "typing-extensions>=4.15.0",
 ]
 doc = [
@@ -93,5 +95,5 @@ explicit = true
 
 [[tool.uv.index]]
 name = "pytorch-cuda"
-url = "https://download.pytorch.org/whl/cu129"
+url = "https://download.pytorch.org/whl/cu130"
 explicit = true
